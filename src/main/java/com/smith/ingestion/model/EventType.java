@@ -1,6 +1,5 @@
 package com.smith.ingestion.model;
 
-import lombok.Data;
 
 public enum EventType {
     USER_LOGIN,
