@@ -3,6 +3,7 @@ package com.smith.ingestion.config;
 import com.smith.ingestion.dto.EventDTO;
 import com.smith.ingestion.request.EventRequest;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public class IngestionMapper {
         dto.setTimestamp(request.getTimestamp());
         dto.setClientId(request.getClientId());
 
-        dto.setReceivedAt(Instant.now());
+        dto.setReceivedAt(Timestamp.from(Instant.now()));
         dto.setVersion("1.0.0");
         dto.setId(UUID.randomUUID());
 

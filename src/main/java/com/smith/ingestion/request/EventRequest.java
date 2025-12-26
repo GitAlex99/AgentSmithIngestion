@@ -8,6 +8,7 @@
 
 
     import java.io.Serializable;
+    import java.sql.Timestamp;
     import java.time.Instant;
     import java.util.UUID;
 
@@ -21,7 +22,7 @@
         private String severity;
         private JsonNode payload;
         @NotNull(message = "timestamp cannot be null")
-        private Instant timestamp;
+        private Timestamp timestamp;
         @NotNull(message = "clientId cannot be null")
         private UUID clientId;
 
