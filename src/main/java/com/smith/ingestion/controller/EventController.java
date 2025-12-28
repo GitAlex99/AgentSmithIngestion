@@ -13,19 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 
 @RestController
-    @RequestMapping("api/v1")
-    public class EventController {
+@RequestMapping("api/v1")
+public class EventController {
 
-        private static final Logger logger = LoggerFactory.getLogger(EventController.class);
+    private static final Logger logger = LoggerFactory.getLogger(EventController.class);
 
-        @Autowired
-        private EventIngestionService eventIngestionService;
+    @Autowired
+    private EventIngestionService eventIngestionService;
 
-        @PostMapping("/events")
+    @PostMapping("/events")
     public void eventIngestion(@Valid @RequestBody EventRequest request) {
 
         logger.info("Received event: {}", request);
 
         eventIngestionService.ingest(request);
+
     }
 }
