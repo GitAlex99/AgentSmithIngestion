@@ -42,14 +42,14 @@ public class KafkaProducerConfig {
     @Bean
     public NewTopic userLogTopic(){
         return TopicBuilder.name("smith.events.ingestion.v1.user.login")
-                .partitions(3)
+                .partitions(6)
                 .replicas(3)
                 .build();
     }
     @Bean
     public NewTopic paymentTopic(){
         return TopicBuilder.name("smith.events.ingestion.v1.payment")
-                .partitions(3)
+                .partitions(6)
                 .replicas(3)
                 .build();
     }

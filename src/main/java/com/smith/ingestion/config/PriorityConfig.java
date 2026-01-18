@@ -4,11 +4,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class PriorityConfig {
 
     private final HashMap<String, String> priorityMap = new HashMap<>();
+
+    private final AtomicInteger counterLogHigh = new AtomicInteger(0);
+
+    private final AtomicInteger counterLogMedium = new AtomicInteger(0);
+
+    private final AtomicInteger counterPaymentHigh = new AtomicInteger(0);
 
     public PriorityConfig(@Value("${event.priority.user.login}") String userLogin,
                           @Value("${event.priority.user.logout}") String userLogout,
@@ -36,5 +43,18 @@ public class PriorityConfig {
 
     public String getPriority(String type){
         return priorityMap.get(type);
+    }
+
+    public int calculatePartitionHighLog(){
+        return counterLogHigh.getAndIncrement() % 3;
+    }
+    public int calculatePartitionMediumLog(){
+        return counterLogMedium.getAndIncrement() % 2 + 3;
+    }
+    public int calculatePartitionHighPayment(){
+        return counterPaymentHigh.getAndIncrement() % 2;
+    }
+    public int calculatePartitionHighOrder(){
+        return counterPaymentHigh.getAndIncrement() % 2;
     }
 }

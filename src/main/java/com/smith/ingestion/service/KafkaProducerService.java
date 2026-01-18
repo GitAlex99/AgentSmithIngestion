@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.apache.commons.lang3.StringUtils;
 
 @Service
 public class KafkaProducerService {
@@ -29,6 +30,7 @@ public class KafkaProducerService {
     public void send(EventDTO dto){
 
         String priority = priorityConfig.getPriority(dto.getType().toString());
+        int partition = 0;
         dto.setSeverity(priority);
 
         String topic = switch (dto.getType()) {
@@ -37,10 +39,35 @@ public class KafkaProducerService {
             case ORDER_PLACED, ORDER_CANCELLED -> ORDERTOPIC;
             default -> DEFAULTTOPIC;
         };
+        if(StringUtils.equalsIgnoreCase(dto.getType().toString(),"USER_LOGIN")
+                || StringUtils.equalsIgnoreCase(dto.getType().toString(),"USER_LOGOUT")
+                || StringUtils.equalsIgnoreCase(dto.getType().toString(),"USER_FAILED_LOGIN")) {
+            partition = switch (priority) {
+                case "HIGH" -> priorityConfig.calculatePartitionHighLog();
+                case "MEDIUM" -> priorityConfig.calculatePartitionMediumLog();
+                default -> 6;
+            };
+        }
+        if(StringUtils.equalsIgnoreCase(dto.getType().toString(),"PAYMENT_SUCCESS")
+                || StringUtils.equalsIgnoreCase(dto.getType().toString(),"PAYMENT_FAILED")) {
+            partition = switch (priority) {
+                case "HIGH" -> priorityConfig.calculatePartitionHighPayment();
+                case "MEDIUM" -> 2;
+                default -> 3;
+            };
+        }
+        if(StringUtils.equalsIgnoreCase(dto.getType().toString(),"ORDER_PLACED")
+                || StringUtils.equalsIgnoreCase(dto.getType().toString(),"ORDER_CANCELLED")) {
+            partition = switch (priority) {
+                case "HIGH" -> priorityConfig.calculatePartitionHighOrder();
+                case "MEDIUM" -> 2;
+                default -> 3;
+            };
+        }
 
         logger.info("Sending event on Kafka with topic: {} and dto: {} with priority: {}", topic, dto,priority);
 
-        kafkaTemplate.send(topic, dto.getId().toString(), dto);
+        kafkaTemplate.send(topic,partition, dto.getId().toString(), dto);
 
         logger.info("Sending of DTO: {} completed", dto.getId().toString());
     }
