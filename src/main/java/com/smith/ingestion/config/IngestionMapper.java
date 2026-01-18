@@ -14,7 +14,6 @@ public class IngestionMapper {
 
         dto.setType(request.getType());
         dto.setSource(request.getSource());
-        dto.setSeverity(request.getSeverity());
         dto.setPayload(request.getPayload());
         dto.setTimestamp(request.getTimestamp());
         dto.setClientId(request.getClientId());

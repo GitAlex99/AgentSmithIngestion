@@ -9,7 +9,6 @@
 
     import java.io.Serializable;
     import java.sql.Timestamp;
-    import java.time.Instant;
     import java.util.UUID;
 
     @Data
@@ -18,8 +17,6 @@
         private EventType type;
         @NotBlank(message = "source cannot be blank")
         private String source;
-        @NotBlank(message = "severity cannot be blank")
-        private String severity;
         private JsonNode payload;
         @NotNull(message = "timestamp cannot be null")
         private Timestamp timestamp;

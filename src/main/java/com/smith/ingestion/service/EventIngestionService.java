@@ -1,7 +1,6 @@
 package com.smith.ingestion.service;
 
 import com.smith.ingestion.config.IngestionMapper;
-import com.smith.ingestion.controller.EventController;
 import com.smith.ingestion.dto.EventDTO;
 import com.smith.ingestion.request.EventRequest;
 import org.slf4j.Logger;
