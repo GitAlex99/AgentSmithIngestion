@@ -45,7 +45,7 @@ public class KafkaProducerService {
             partition = switch (priority) {
                 case "HIGH" -> priorityConfig.calculatePartitionHighLog();
                 case "MEDIUM" -> priorityConfig.calculatePartitionMediumLog();
-                default -> 6;
+                default -> 5;
             };
         }
         if(StringUtils.equalsIgnoreCase(dto.getType().toString(),"PAYMENT_SUCCESS")
